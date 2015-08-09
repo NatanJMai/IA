@@ -2,13 +2,7 @@
 # @NatanJMai - natan.mai@hotmail.com
 
 import xlrd
-
-class Fish (object):
-  def createFish(self, name, light, length, descr):
-    self.name   = name
-    self.light  = light
-    self.length = length
-    self.descr  = descr
+from Fish import Fish
 
 robalo = []
 salmao = []
@@ -22,19 +16,20 @@ def getFishesFromXLS():
 
   for i in range(1, lines):
     fish = Fish() 
-    fish.createFish(worksheet.cell(i,0).value, worksheet.cell(i, 1).value, worksheet.cell(i, 2).value, worksheet.cell(i,3).value)
-    if 'robalo' in fish.descr:
-      robalo.append(fish)
-    else:
-      salmao.append(fish)
+    #fish.createFish(worksheet.cell(i,0).value, worksheet.cell(i, 1).value, worksheet.cell(i, 2).value, worksheet.cell(i,3).value)
+    fish.createFish(worksheet.cell(i,0).value, worksheet.cell(i, 1).value, worksheet.cell(i, 2).value)
+    
+    #if 'robalo' in fish.descr:
+    # robalo.append(fish)
+    #    else:
+    #    salmao.append(fish)
     fishes.append(fish)
 
 
-def main():
+def taskMain():
   getFishesFromXLS()
 
-  for i in fishes:
-    print(i.name, i.light, i.length, i.descr)
+  return fishes
 
 if __name__ == "__main__":
-  main()
+  taskMain()
