@@ -1,6 +1,6 @@
 class Fish (object):
-  def createFish(self, name, light, length):
+  def createFish(self, name, light, length, descr):
     self.name   = name
     self.light  = light
     self.length = length
-#    self.descr  = descr
+    self.descr  = descr
