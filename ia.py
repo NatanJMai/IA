@@ -31,10 +31,9 @@ def getDistanceFromSet(fish1):
     return 'robalo'
 
 
-def filterSet(fishes):
+def filterSet(fishes, setR, setS):
   newF = []
-  setS = [13.0,14.0,15.0,22.0,23.0,30.0]
-  setR = [29.0,30.0,42.0,43.0,48.0,49.0]
+  
   for i in fishes:
     if i.descr == 'robalo':
       if i.name in setR:
@@ -56,8 +55,8 @@ def finalCalc(fishesAx):
     result  = getDistanceFromSet(i)
     i.descr = result
     ab.append(i)
-#    print(i.name, result, i.light, i.length)
   return ab
+
 
 def sPrint(fish):
   print("__________________________________________________________")
@@ -67,21 +66,36 @@ def sPrint(fish):
     else:
       print("RR%d = (%s,%s)" % (int(i.name), i.light, i.length))
 
-  for j in setFishRobalo:
-    print("RRRR_%d = (%s,%s)" % (int(j.name), j.light, j.length))
 
-  for j in setFishSalmao:
-    print("SSSS_%d = (%s,%s)" % (int(j.name), j.light, j.length))
+def diff(fishSet1, fishSet2):
+  cont = 0
+
+  for i in range(0, len(fishSet1)):
+    if fishSet1[i].descr != fishSet2[i].descr:
+      cont += 1
+      print(fishSet1[i].name, fishSet1[i].light, fishSet1[i].length, fishSet1[i].descr)
+      print(fishSet2[i].name, fishSet2[i].light, fishSet2[i].length, fishSet2[i].descr)
+      print("-----------------------------------------")
+  return cont
+
 
 def main():
   res    = taskMain()
-  fishes = filterSet(res)
-  sPrint(fishes)  
+  aux1   = [] 
+  cont   = 0
+  setS = [13.0,14.0,15.0,22.0,23.0,30.0]
+  setR = [29.0,30.0,42.0,43.0,48.0,49.0]
+  
+  for i in filterSet(res, setR, setS):
+    j = Fish()
+    j.createFish(i.name, i.light, i.length, i.descr)
+    aux1.append(j)
+  
+  fishes  = filterSet(res, setR, setS)
   fishes1 = finalCalc(fishes)
   
-#  sPrint(fishes)
-#  sPrint(fishes1)
-
+  cont = diff(aux1, fishes1)
+  print("%d diferencas" % cont)
 
 if __name__ == "__main__":
  	main()
