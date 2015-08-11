@@ -1,3 +1,5 @@
+# Natan J. Mai
+
 from Fish   import Fish
 from task01 import taskMain
 from math   import sqrt
