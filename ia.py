@@ -26,7 +26,7 @@ def getDistanceFromSet(fish1):
  
   mediaRobalo = sum(distancesRobalo) / len(distancesRobalo)
   mediaSalmao = sum(distancesSalmao) / len(distancesSalmao)
-
+  
   if mediaRobalo > mediaSalmao:
     return 'salmao'
   else:
@@ -85,8 +85,8 @@ def main():
   res    = taskMain()
   aux1   = [] 
   cont   = 0
-  setS = [13.0,14.0,15.0,22.0,23.0,30.0]
-  setR = [29.0,30.0,42.0,43.0,48.0,49.0]
+  setS = [10.0,12.0,19.0,2.0,22.0,29.0]
+  setR = [39.0,30.0,42.0,43.0,48.0,49.0]
   
   for i in filterSet(res, setR, setS):
     j = Fish()

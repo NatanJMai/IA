@@ -16,7 +16,7 @@ def getFishesFromXLS():
 
   for i in range(1, lines):
     fish = Fish() 
-    fish.createFish(worksheet.cell(i,0).value, worksheet.cell(i, 1).value, worksheet.cell(i, 2).value, worksheet.cell(i,3).value)
+    fish.createFish(worksheet.cell(i,0).value, worksheet.cell(i, 1).value, worksheet.cell(i, 2).value, worksheet.cell(i,3).value, 0, 0)
     #fish.createFish(worksheet.cell(i,0).value, worksheet.cell(i, 1).value, worksheet.cell(i, 2).value)
     
     if 'robalo' in fish.descr:

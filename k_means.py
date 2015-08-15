@@ -6,24 +6,43 @@ from task01 import taskMain
 from enum   import Enum
 import math
 
-class Cluster(Enum):
+class Type(Enum):
   Robalo = 0
   Salmao = 1
   Nada   = 2
+
+class Cluster(object):
+  def createCluster(self, typC, name, setC, center):
+    self.typC   = typC
+    self.name   = name
+    self.setC   = setC
+    self.center = center
 
 def main(p1, p2):
   stop = True
 
   while stop:
-    print(p1[0])
+    passo1(p1, p2)
     stop = False
-  opa = taskMain()
 
 
-def passo1():
+def getDistances(fish):
+  #Cluster A
+  w1 = 0.7
+  w2 = 0.3
+
+  dSalmao = sqrt(w1 * ((fish.light - clusterA.center[0] ** 2)) + w2 * ((fish.length - clusterA.center[0]) ** 2))
+
+
+  return True 
+
+def passo1(p1, p2):
   return True
 
 def passo2():
+  for i in setFish:
+    getDistances(i)
+
   return True
 
 def passo3():
@@ -39,4 +58,11 @@ def passo5():
 if __name__ == "__main__":
   p1 = (2, 3)
   p2 = (3, 4)
+
+  clusterA = Cluster()
+  clusterB = Cluster()
+  clusterA.createCluster(Type.Nada, "A", [], (0,0))
+  clusterB.createCluster(Type.Nada, "B", [], (0,0))
+
+  setFish  = taskMain()
   main(p1, p2)
