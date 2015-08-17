@@ -4,5 +4,6 @@ class Fish (object):
     self.light  = light
     self.length = length
     self.descr  = descr
-    self.distS  = distS
-    self.distE  = distR
+    self.distA  = distS
+    self.distB  = distR
+    self.tipo   = ""
