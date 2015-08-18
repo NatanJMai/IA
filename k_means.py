@@ -7,9 +7,9 @@ from enum   import Enum
 from math import sqrt
 
 class Type(Enum):
-  Robalo = 0
-  Salmao = 1
-  Nada   = 2
+  A = 0
+  B = 1
+  N = 2
 
 class Cluster(object):
   def createCluster(self, typC, name, setC, center):
@@ -114,8 +114,8 @@ if __name__ == "__main__":
   global clusterB
   clusterA = Cluster()
   clusterB = Cluster()
-  clusterA.createCluster(Type.Nada, "A", [], p1)
-  clusterB.createCluster(Type.Nada, "B", [], p2)
+  clusterA.createCluster(Type.N, "A", [], p1)
+  clusterB.createCluster(Type.N, "B", [], p2)
 
   setFish  = taskMain()
   main(p1, p2)
