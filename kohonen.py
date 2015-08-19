@@ -7,28 +7,45 @@ from task01 import taskMain
 from random import uniform
 
 neuros = [[],[],[],[],[],[],[],[]]
+global distances
+distances = []
 
 class neuro(object):
   def createNeuro(self, weightL, weightC):
-    self.weightL = weightL
-    self.weightC = weightC
+    self.weightL  = weightL
+    self.weightC  = weightC
+    self.distance = 0
 
 
 def main():
-  calcWeights(setFish[0])
+  neuSimilar = competitive(setFish[0])
+
   return True
 
 
 
-def calcWeights(fish):
-  for i in neuros:
-    for j in i:
-      calcDistance(j, fish)
-
-
 def calcDistance(neuro, fish):
   dist = sqrt(((fish.light - neuro.weightL) ** 2) + ((fish.length - neuro.weightC) ** 2))
-  print(dist)
+  return dist
+
+
+# determina o neurônio com os pesos mais
+# similares ao vetor de característica apresentado ao mapa.
+def competitive(fish):
+  for i in neuros:
+    for j in i:
+      a = calcDistance(j, fish)
+      j.distance = a
+      distances.append(a)
+      if j.distance == min(distances):
+        menor = j
+
+  print(min(distances))
+  return menor
+
+
+def colaborative():
+  return True
 
 
 if __name__ == "__main__":
@@ -39,8 +56,6 @@ if __name__ == "__main__":
       neu = neuro()
       neu.createNeuro(uniform(0, 1), uniform(0, 1))
       neuros[i].append(neu)
-  
-  for i in neuros:
-    for j in i:
-      print(j.weightL, j.weightC)
+ 
   main()
+
