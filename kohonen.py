@@ -17,7 +17,7 @@ distances = []
 
 
 n   = 8
-n0  = 0.3
+n0  = 0.2
 d0  = n / 2
 T   = 130
 
@@ -35,6 +35,7 @@ class neuro(object):
 
 def main():
   neuSimilar = competitive(setFish[0])
+  findNeighb(neuSimilar)
   return True
 
 
@@ -43,23 +44,40 @@ def verifyNeigh(i, d, z):
     return True
 
 
-def updateWeight(neu):
-  neu
+def getKnow():
+  res = n0 * (1 - (itA / T))
+  return res
 
+
+def updateWeight(neu, mini):
+  neu.weightL = neu.weightL + (getKnow() * (calcDistanceNN(mini, neu)))
+  neu.weightC = neu.weightC + (getKnow() * (calcDistanceNN(mini, neu)))
 
 
 def getD():
-  d = ceil(d0 * (1 - (itAtual / T)))
+  d = ceil(d0 * (1 - (itA / T)))
   return d
 
+
 def findNeighb(neu):
-  for n in neuro:
-    d = getD()
-    if verifyNeigh(neu.x, d, n.x) and verifyNeigh(neu.y, d, n.y):
+  for it in neuros:
+    for n in it: 
+      d = getD()
+      if verifyNeigh(neu.x, d, n.x) and verifyNeigh(neu.y, d, n.y):
+        print("-------------------------------------------------------------------\n")
+        print("neigh  ==> %d - %d, para D => %f" % (n.x, n.y, d))
+        print("before ==> %d - %d, => %f - %f" % (n.x, n.y, n.weightL, n.weightC))
+        updateWeight(n, neu)
+        print("after  ==> %d - %d, => %f - %f" % (n.x, n.y, n.weightL, n.weightC))
+        print("-------------------------------------------------------------------\n")
 
 
+def calcDistanceNN(neu1, neu2):
+  dist = sqrt(((neu1.weightL - neu2.weightL) ** 2) + ((neu1.weightC - neu2.weightC) ** 2))
+  return dist
 
-def calcDistance(neuro, fish):
+
+def calcDistanceNF(neuro, fish):
   dist = sqrt(((fish.light - neuro.weightL) ** 2) + ((fish.length - neuro.weightC) ** 2))
   return dist
 
@@ -69,7 +87,7 @@ def calcDistance(neuro, fish):
 def competitive(fish):
   for i in neuros:
     for j in i:
-      a = calcDistance(j, fish)
+      a = calcDistanceNF(j, fish)
       j.distance = a
       distances.append(a)
       if j.distance == min(distances):
