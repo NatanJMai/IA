@@ -8,21 +8,17 @@ from random import uniform
 
 neuros = [[],[],[],[],[],[],[],[]]
 global distances
-global itA
-global n
-global d0
-global T
-global n0
 distances = []
 
-
+'''
 n   = 8
 n0  = 0.2
 d0  = n / 2
-T   = 130
+T   = 110
 
 #It atual
 itA = 0
+'''
 
 class neuro(object):
   def createNeuro(self, weightL, weightC, x, y):
@@ -33,9 +29,30 @@ class neuro(object):
     self.y        = y
 
 
-def main():
-  neuSimilar = competitive(setFish[0])
-  findNeighb(neuSimilar)
+def updateN0(n0, itA, T):
+  a = n0 * (1 - (itA / T))
+  return a
+
+def main(entry):  
+  itA = 0.0      # Iteracao atual
+  n   = 8        # n x n
+  n0  = 0.2      # Aprendizado
+  d0  = 4.0      # Vizinhanca
+  T   = 110.0    # Total do treinamento
+
+  while itA < 130 and n0 > 0.0000000000001:
+    for i in entry:
+      neuSimilar = competitive(i)
+      findNeighb(neuSimilar, d0, n0)
+
+    c  = updateN0(n0, itA, T)
+    d  = updateD0(d0, itA, T)
+    d0 = d
+    n0 = c
+    print(n0, d0)
+    itA = itA + 1
+
+  print(itA)
   return True
 
 
@@ -49,27 +66,25 @@ def getKnow():
   return res
 
 
-def updateWeight(neu, mini):
-  neu.weightL = neu.weightL + (getKnow() * (calcDistanceNN(mini, neu)))
-  neu.weightC = neu.weightC + (getKnow() * (calcDistanceNN(mini, neu)))
+def updateWeight(neu, mini, n0):
+  neu.weightL = neu.weightL + (n0 * (calcDistanceNN(mini, neu)))
+  neu.weightC = neu.weightC + (n0 * (calcDistanceNN(mini, neu)))
 
 
-def getD():
-  d = ceil(d0 * (1 - (itA / T)))
-  return d
+def updateD0(d0, itA, T):
+  b = ceil(d0 * (1 - (itA / T)))
+  return b
 
-
-def findNeighb(neu):
+def findNeighb(neu, d0, n0):
   for it in neuros:
     for n in it: 
-      d = getD()
-      if verifyNeigh(neu.x, d, n.x) and verifyNeigh(neu.y, d, n.y):
-        print("-------------------------------------------------------------------\n")
-        print("neigh  ==> %d - %d, para D => %f" % (n.x, n.y, d))
-        print("before ==> %d - %d, => %f - %f" % (n.x, n.y, n.weightL, n.weightC))
-        updateWeight(n, neu)
-        print("after  ==> %d - %d, => %f - %f" % (n.x, n.y, n.weightL, n.weightC))
-        print("-------------------------------------------------------------------\n")
+      if verifyNeigh(neu.x, d0, n.x) and verifyNeigh(neu.y, d0, n.y):
+        #print("-------------------------------------------------------------------\n")
+#        print("neigh  ==> %d - %d, para D => %f" % (n.x, n.y, d0))
+#        print("before ==> %d - %d, => %f - %f" % (n.x, n.y, n.weightL, n.weightC))
+        updateWeight(n, neu, n0)
+#        print("after  ==> %d - %d, => %f - %f" % (n.x, n.y, n.weightL, n.weightC))
+#        print("-------------------------------------------------------------------\n")
 
 
 def calcDistanceNN(neu1, neu2):
@@ -112,5 +127,5 @@ if __name__ == "__main__":
       neu.createNeuro(uniform(0, 1), uniform(0, 1), i, j)
       neuros[i].append(neu)
  
-  main()
+  main([setFish[0]])
 
