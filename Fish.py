@@ -6,4 +6,6 @@ class Fish (object):
     self.descr  = descr
     self.distA  = distS
     self.distB  = distR
+    self.xNeu   = 0
+    self.yNeu   = 0
     self.tipo   = ""
