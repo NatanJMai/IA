@@ -37,7 +37,7 @@ def makeNewGraph(vertex, edges):
   return graph
 
 
-def assignValues(vList, nivel):
+def assignValues(vList):
   w0 = [1.00, 0.22, 0.77, 0.73, 0.56]
   w1 = [1.00, 0.72, 0.28, 0.95, 0.95]
   w2 = [1.00, 0.34, 0.86, 0.37, 0.48]
@@ -48,11 +48,13 @@ def assignValues(vList, nivel):
   nivel1 = []
   nivel0 = []
   for i in vList:
-    if i.level == nivel + 1:
+    if i.level == 2:
+      nivel2.append(i)
+    elif i.level == 1:
       nivel1.append(i)
-    elif i.level == nivel:
+    elif i.level == 0:
       nivel0.append(i)
-
+  
   for i in range(0, len(nivel1)):
     edge = Edge()
     edge.newEdge("w" + str(i) + str(0), 0, nivel1[i], graph.bias)
@@ -62,14 +64,26 @@ def assignValues(vList, nivel):
       edge.newEdge("w" + str(i) + str(j), 0, nivel1[i], nivel0[j - 1])
       nivel0[i].eList.append(edge)
       nivel1[i].eList.append(edge)
-
-  for i in nivel1:
+  
+  name = 3
+  for i in range(0, len(nivel2)):
+    edge = Edge()
+    edge.newEdge("w" + str(name) + str(0), 0, nivel2[i], graph.bias)
+    nivel2[i].eList.append(edge)
+    for j in range(1, len(nivel1) + 1):
+      edge = Edge()
+      edge.newEdge("w" + str(name) + str(j), 0, nivel2[i], nivel1[j - 1])
+      nivel1[i].eList.append(edge)
+      nivel2[i].eList.append(edge)
+    name += 1
+  
+  for i in graph.vList:
     for j in i.eList:
-      print(j.name)
+      print(i.level, j.name, j.source.name, j.target.name)
 
 
 
 
 if __name__ == "__main__":
   graph = makeNewGraph(9, 0)
-  assignValues(graph.vList, 1)
+  assignValues(graph.vList)
