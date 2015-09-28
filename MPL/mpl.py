@@ -174,8 +174,8 @@ def printM(graph):
   for j in range(0, len(graph.vMatx)):
     print("%d =>    %s" % (j, graph.vMatx[j]))
 
-  for j in graph.vList:
-    print(j.name, j.weight, j.numberM, j.eList)
+  #for j in graph.vList:
+  #  print(j.name, j.weight, j.numberM, j.eList)
 
 
 
@@ -213,8 +213,15 @@ def calcErrorOutput1(out1, out2, graph):
 def calcOtherWeight2(numberM, target, value, graph):
   graph.vMatx[numberM][target] = graph.vMatx[numberM][target] + (value * graph.vList[numberM - 1].value)
   graph.vMatx[target][numberM] = graph.vMatx[numberM][target]
+    
 
-  print(graph.vList[numberM - 1].name)
+def updateInputWeight(numberM, target, graph):
+  wei  = graph.vMatx[numberM][target]
+  valA = graph.vList[target - 1].value
+  valI = graph.vList[numberM - 1].value
+  
+  graph.vMatx[numberM][target] = wei + (valA * valI)
+  graph.vMatx[target][numberM] = graph.vMatx[numberM][target]
 
 
 def calcValueUpdate3(numberL, targetL, graph):
@@ -228,49 +235,65 @@ def calcValueUpdate3(numberL, targetL, graph):
   graph.vList[nL].value = vnL * (1 - vnL) * som
 #  print(graph.vList[nL].name, graph.vList[tL].name)
 
+def printOutputs(out1, out2, graph):
+  print("RESULTADO => "),
+  print(out1 - graph.vList[7].value, out2 - graph.vList[8].value)
+
 if __name__ == "__main__":
   geral = [0.5, 3.0, 5.0, 3.0, 6.0, 8.0, 49.0]
   bias  = geral[0]
   entry = geral[1:5]
   outp1 = geral[5]
   outp2 = geral[6]
-
+  f     = 0
   graph = makeNewGraph(10, 0, 0.5)
   assignValues(graph.vList, graph)
   
-  graph.vList[4].value = getSumWeight(5, 4, graph, entry)
-  graph.vList[5].value = getSumWeight(6, 5, graph, entry)
-  graph.vList[6].value = getSumWeight(7, 6, graph, entry)
-
-  entry = []
-  entry.append(graph.vList[4].value)
-  entry.append(graph.vList[5].value)
-  entry.append(graph.vList[6].value)
+  graph.vList[0].value = geral[1]
+  graph.vList[1].value = geral[2]
+  graph.vList[2].value = geral[3]
+  graph.vList[3].value = geral[4]
   
-  graph.vList[7].value = getSumWeight(8, 7, graph, entry)
-  graph.vList[8].value = getSumWeight(9, 8, graph, entry)
+  while(f < 5):
+    graph.vList[4].value = getSumWeight(5, 4, graph, entry)
+    graph.vList[5].value = getSumWeight(6, 5, graph, entry)
+    graph.vList[6].value = getSumWeight(7, 6, graph, entry)
+
+    entry = []
+    entry.append(graph.vList[4].value)
+    entry.append(graph.vList[5].value)
+    entry.append(graph.vList[6].value)
+  
+    graph.vList[7].value = getSumWeight(8, 7, graph, entry)
+    graph.vList[8].value = getSumWeight(9, 8, graph, entry)
    
-#  print(entry)
-#  for i in graph.vList:
-#    print(i.name, i.value)
+    calcErrorOutput1(outp1, outp2, graph)
+    calcOtherWeight2(5, 8, graph.vList[7].value, graph)
+    calcOtherWeight2(5, 9, graph.vList[8].value, graph)
 
-  printM(graph)
-
-  calcErrorOutput1(outp1, outp2, graph)
-  calcOtherWeight2(5, 8, graph.vList[7].value, graph)
-  calcOtherWeight2(5, 9, graph.vList[8].value, graph)
-
-#  print(entry)
-
-  calcOtherWeight2(6, 8, graph.vList[7].value, graph)
-  calcOtherWeight2(6, 9, graph.vList[8].value, graph)
+    calcOtherWeight2(6, 8, graph.vList[7].value, graph)
+    calcOtherWeight2(6, 9, graph.vList[8].value, graph)
  
-  calcOtherWeight2(7, 8, graph.vList[7].value, graph)
-  calcOtherWeight2(7, 9, graph.vList[8].value, graph)
+    calcOtherWeight2(7, 8, graph.vList[7].value, graph)
+    calcOtherWeight2(7, 9, graph.vList[8].value, graph)
+  
+    calcValueUpdate3(5, [8,9], graph)
+    calcValueUpdate3(6, [8,9], graph)
+    calcValueUpdate3(7, [8,9], graph)
+   
+    updateInputWeight(1, 5, graph)
+    updateInputWeight(1, 6, graph)
+    updateInputWeight(1, 7, graph)
+    updateInputWeight(2, 5, graph)
+    updateInputWeight(2, 6, graph)
+    updateInputWeight(2, 7, graph)
+    updateInputWeight(3, 5, graph)
+    updateInputWeight(3, 6, graph)
+    updateInputWeight(3, 7, graph)
+    updateInputWeight(4, 5, graph)
+    updateInputWeight(4, 6, graph)
+    updateInputWeight(4, 7, graph)
 
-  printM(graph)
-  calcValueUpdate3(5, [8,9], graph)
-  calcValueUpdate3(6, [8,9], graph)
-  calcValueUpdate3(7, [8,9], graph)
-  printM(graph)
-
+    printM(graph)
+    printOutputs(outp1, outp2, graph)
+    f += 1
