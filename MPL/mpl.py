@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import math as MATH
 
 class Graph(object):
@@ -192,11 +195,12 @@ def getSumWeight(numberM, numberL, graph, entry):
     soma += graph.vMatx[xList[i]][numberM] * entry[i]
   
   soma += graph.bias.value * graph.vMatx[0][numberM]
-
+  
+  '''
   print("%d -> %s = %0.2f" % (numberM, 'bias', graph.vList[numberL].bias))
   for i in xList:
     print("%d -> %d = %f" % (numberM, i, graph.vMatx[i][numberM]))
-
+  '''
   return sigmoide(soma)
 
 
@@ -237,63 +241,73 @@ def calcValueUpdate3(numberL, targetL, graph):
 
 def printOutputs(out1, out2, graph):
   print("RESULTADO => "),
-  print(out1 - graph.vList[7].value, out2 - graph.vList[8].value)
+  print(graph.vList[7].value, graph.vList[8].value)
 
 if __name__ == "__main__":
-  geral = [0.5, 3.0, 5.0, 3.0, 6.0, 8.0, 49.0]
-  bias  = geral[0]
-  entry = geral[1:5]
-  outp1 = geral[5]
-  outp2 = geral[6]
-  f     = 0
+  training = [[0.5, 3.0, 5.0, 3.0, 6.0, 8.0, 49.0], 
+              [0.5, 4.0, 6.0, 3.0, 5.0, 8.0, 47.0], 
+              [0.5, 7.0, 3.0, 6.0, 8.0, 86.0, 80.0], 
+              [0.5, 4.0, 6.0, 4.0, 7.0, 21.0, 70.0], 
+              [0.5, 8.0, 4.0, 7.0, 9.0, 112.0, 107.0], 
+              [0.5, 5.0, 7.0, 5.0, 8.0, 38.0, 95.0]]
+
   graph = makeNewGraph(10, 0, 0.5)
   assignValues(graph.vList, graph)
-  
-  graph.vList[0].value = geral[1]
-  graph.vList[1].value = geral[2]
-  graph.vList[2].value = geral[3]
-  graph.vList[3].value = geral[4]
-  
-  while(f < 5):
-    graph.vList[4].value = getSumWeight(5, 4, graph, entry)
-    graph.vList[5].value = getSumWeight(6, 5, graph, entry)
-    graph.vList[6].value = getSumWeight(7, 6, graph, entry)
-
-    entry = []
-    entry.append(graph.vList[4].value)
-    entry.append(graph.vList[5].value)
-    entry.append(graph.vList[6].value)
-  
-    graph.vList[7].value = getSumWeight(8, 7, graph, entry)
-    graph.vList[8].value = getSumWeight(9, 8, graph, entry)
+  f = 0 
    
-    calcErrorOutput1(outp1, outp2, graph)
-    calcOtherWeight2(5, 8, graph.vList[7].value, graph)
-    calcOtherWeight2(5, 9, graph.vList[8].value, graph)
+  while(f < 4):
+    print("\n### %dº ITERATION\n" % (f + 1))
+    for i in training:
+      geral = i
+      bias  = geral[0]
+      entry = geral[1:5]
+      outp1 = geral[5]
+      outp2 = geral[6]
 
-    calcOtherWeight2(6, 8, graph.vList[7].value, graph)
-    calcOtherWeight2(6, 9, graph.vList[8].value, graph)
+      graph.vList[0].value = geral[1]
+      graph.vList[1].value = geral[2]
+      graph.vList[2].value = geral[3]
+      graph.vList[3].value = geral[4]
+
+      graph.vList[4].value = getSumWeight(5, 4, graph, entry)
+      graph.vList[5].value = getSumWeight(6, 5, graph, entry)
+      graph.vList[6].value = getSumWeight(7, 6, graph, entry)
+
+      entry = []
+      entry.append(graph.vList[4].value)
+      entry.append(graph.vList[5].value)
+      entry.append(graph.vList[6].value)
+  
+      graph.vList[7].value = getSumWeight(8, 7, graph, entry)
+      graph.vList[8].value = getSumWeight(9, 8, graph, entry)
+   
+      calcErrorOutput1(outp1, outp2, graph)
+
+      calcOtherWeight2(5, 8, graph.vList[7].value, graph)
+      calcOtherWeight2(5, 9, graph.vList[8].value, graph)
+
+      calcOtherWeight2(6, 8, graph.vList[7].value, graph)
+      calcOtherWeight2(6, 9, graph.vList[8].value, graph)
  
-    calcOtherWeight2(7, 8, graph.vList[7].value, graph)
-    calcOtherWeight2(7, 9, graph.vList[8].value, graph)
+      calcOtherWeight2(7, 8, graph.vList[7].value, graph)
+      calcOtherWeight2(7, 9, graph.vList[8].value, graph)
   
-    calcValueUpdate3(5, [8,9], graph)
-    calcValueUpdate3(6, [8,9], graph)
-    calcValueUpdate3(7, [8,9], graph)
+      calcValueUpdate3(5, [8,9], graph)
+      calcValueUpdate3(6, [8,9], graph)
+      calcValueUpdate3(7, [8,9], graph)
    
-    updateInputWeight(1, 5, graph)
-    updateInputWeight(1, 6, graph)
-    updateInputWeight(1, 7, graph)
-    updateInputWeight(2, 5, graph)
-    updateInputWeight(2, 6, graph)
-    updateInputWeight(2, 7, graph)
-    updateInputWeight(3, 5, graph)
-    updateInputWeight(3, 6, graph)
-    updateInputWeight(3, 7, graph)
-    updateInputWeight(4, 5, graph)
-    updateInputWeight(4, 6, graph)
-    updateInputWeight(4, 7, graph)
+      updateInputWeight(1, 5, graph)
+      updateInputWeight(1, 6, graph)
+      updateInputWeight(1, 7, graph)
+      updateInputWeight(2, 5, graph)
+      updateInputWeight(2, 6, graph)
+      updateInputWeight(2, 7, graph)
+      updateInputWeight(3, 5, graph)
+      updateInputWeight(3, 6, graph)
+      updateInputWeight(3, 7, graph)
+      updateInputWeight(4, 5, graph)
+      updateInputWeight(4, 6, graph)
+      updateInputWeight(4, 7, graph)
 
-    printM(graph)
-    printOutputs(outp1, outp2, graph)
+      printOutputs(outp1, outp2, graph)
     f += 1
