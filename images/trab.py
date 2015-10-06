@@ -99,42 +99,37 @@ def calcBaixa(op, kernel):
 
 
 def calcAlta(op, mapa, kernel, x, j):
-  if mapa[x][j] < 0:
-    c = -1
-  else:
-    c = 1
-
-  result = mapa[x][j] + (c * sum(kernel))
+  result = sum(kernel)
   return result
 
-def bordasA(oldM, x, j):
+def bordasA(op, oldM, x, j):
   lista = []
 
   if x + 1 > 12:
     lista.append(0)
   else:
-    lista.append(oldM[x + 1][j])
+    lista.append((oldM[x + 1][j] * (-1)))
 
   if x - 1 < 0:
     lista.append(0)
   else:
-    lista.append(oldM[x - 1][j])
+    lista.append((oldM[x - 1][j] * (-1)))
 
   if j + 1 > 12:
     lista.append(0)
   else:
-    lista.append(oldM[x][j + 1])
+    lista.append((oldM[x][j + 1] * (-1)))
 
   if j - 1 < 0:
     lista.append(0)
   else:
-    lista.append(oldM[x][j - 1])
+    lista.append((oldM[x][j - 1] * (-1)))
+  
+  lista.append(4 * oldM[x][j])
+  return sum(lista)
 
-  lista.append((-4) * oldM[x][j])
-  return lista
 
-
-def get(f, op, altaBaixa):
+def get(f,mat, op, altaBaixa):
   newM = []
   for i in range(0, 13):
     l = []
@@ -151,76 +146,56 @@ def get(f, op, altaBaixa):
         lits = bordas(oldM, i, j)
         newM[i][j] = calcBaixa(op, lits)
   
-    for i in newM:
-      print(i)
-    print('\n\n')
-
   else:
     for i in range(0, 13):
       for j in range(0, 13):
-        lits       = bordasA(oldM, i, j)
-        newM[i][j] = calcAlta(op, oldM, lits, i, j)
+        newM[i][j] =  bordasA(op, mat, i, j)
+        #newM[i][j] = calcAlta(op, mat, lits, i, j)
     
-    matshow(newM, fignum=101, cmap=cm.gray)
-    show()
-    for j in newM:
-      print(j)
-    print('\n\n')
+  return newM
 
-def passaBaixa():
+def testes():
   files = getImagesCSV()
   
-  nr = int(input("Arquivo nr => "))
-  ab = int(input("Alta (0), Baixa (1) => "))
+  nr  = int(input("Arquivo nr => "))
   nr -= 1
-  
+  opm = 2
+
   print("\n\n ############### ARQUIVO %s ###############\n\n\n" % files[nr].name)
 
   for i in files[nr].matx:
     print(i)
   
-  if ab == 1:
-    opb = int(input("\nMedia(1)\nModa(2)\nMediana(3)\n=> "))
-    print('\n') 
-    get(files[nr], opb, 1)
-
-    '''
-    print("\nMEDIA =>\n")
-    get(files[nr], 1, 1)
-
-    print("\nMODA =>\n")
-    get(files[nr], 2, 1)
-
-    print("\nMEDIANA =>\n")
-    get(files[nr], 3, 1)
-    '''
-    print('\n\n')
-
-  else:
-    opa = int(input("\nLaplaciano(1)\n=> "))
-    print('\n')
-    get(files[nr], 1, 0)
-
-
-def samplemat(dims):
-  """Make a matrix with all zeros and increasing elements on the diagonal"""
-  aa = zeros(dims)
-  for i in range(min(dims)):
-    aa[i, i] = i
-  return aa
-
-def teste():
-
-  # Display 2 matrices of different sizes
-  #dimlist = [(12, 12), (15, 35)]
-  #for d in dimlist:
-  #  matshow(samplemat(d))
-
-  # Display a random matrix with a specified figure number and a grayscale
-  # colormap
-  matshow(rand(64, 64), fignum=100, cmap=cm.gray)
+  #Original
+  matshow(files[nr].matx, fignum = 1, cmap=cm.gray)
   show()
+
+  opb = int(input("\nMedia(1)\nModa(2)\nMediana(3)\n=> "))
+  print('\n') 
+
+  #Passa baixa
+  mmm = get(files[nr], [], opb, 1)
+  matshow(mmm, fignum=2, cmap=cm.gray)
+  show()
+
+  '''
+  print("\nMEDIA =>\n")
+  get(files[nr], 1, 1)
+
+  print("\nMODA =>\n")
+  get(files[nr], 2, 1)
+
+  print("\nMEDIANA =>\n")
+  get(files[nr], 3, 1)
+  '''
+
+  baixo = int(input("\nLaplaciano(1)\n=> "))
+  print('\n')
+  xxx = get(files[nr], mmm, baixo, 0)
+  matshow(xxx, fignum=3, cmap=cm.gray)
+  show()
+   
 
 
 if __name__ == "__main__":
-  passaBaixa() 
+  testes()
