@@ -255,8 +255,8 @@ if __name__ == "__main__":
   assignValues(graph.vList, graph)
   f = 0 
    
-  while(f < 4):
-    print("\n### %dº ITERATION\n" % (f + 1))
+  while(f < 3):
+    print("\n### %dº PASSO\n" % (f + 1))
     for i in training:
       geral = i
       bias  = geral[0]
