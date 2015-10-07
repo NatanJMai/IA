@@ -241,15 +241,19 @@ def calcValueUpdate3(numberL, targetL, graph):
 
 def printOutputs(out1, out2, graph):
   print("RESULTADO => "),
-  print(graph.vList[7].value, graph.vList[8].value)
+  print(out1 - graph.vList[7].value, out2 - graph.vList[8].value)
 
 if __name__ == "__main__":
   training = [[0.5, 3.0, 5.0, 3.0, 6.0, 8.0, 49.0], 
               [0.5, 4.0, 6.0, 3.0, 5.0, 8.0, 47.0], 
               [0.5, 7.0, 3.0, 6.0, 8.0, 86.0, 80.0], 
               [0.5, 4.0, 6.0, 4.0, 7.0, 21.0, 70.0], 
+              [0.5, 5.0, 7.0, 5.0, 6.0, 22.0, 68.0],
               [0.5, 8.0, 4.0, 7.0, 9.0, 112.0, 107.0], 
               [0.5, 5.0, 7.0, 5.0, 8.0, 38.0, 95.0]]
+
+  #ALTERAR O INDICE PARA TROCAR O TESTE (0 a 6). 
+  trainings = [training[0]]
 
   graph = makeNewGraph(10, 0, 0.5)
   assignValues(graph.vList, graph)
@@ -257,12 +261,14 @@ if __name__ == "__main__":
    
   while(f < 3):
     print("\n### %dº PASSO\n" % (f + 1))
-    for i in training:
+    for i in trainings:
       geral = i
       bias  = geral[0]
       entry = geral[1:5]
       outp1 = geral[5]
       outp2 = geral[6]
+
+      print(outp1, outp2)
 
       graph.vList[0].value = geral[1]
       graph.vList[1].value = geral[2]
